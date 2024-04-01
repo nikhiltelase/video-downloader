@@ -15,7 +15,7 @@ def download():
         else:
             video = youtube_object.streams.get_highest_resolution()
         title.configure(text=youtube_object.title)
-        video.download(".downloads/")
+        video.download("C:/Users/Lenovo/Videos/python downloader/")
         finished_label.configure(text="Download Completed", text_color="green")
         send_notification("Download Successful")
     except:
