@@ -37,7 +37,7 @@ With this application, you can easily download your favorite YouTube videos dire
 1. Run the application:
 
    ```bash
-   python app.py
+   python main.py
    ```
 
 2. Input the YouTube video link into the provided field.
