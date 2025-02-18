@@ -5,21 +5,38 @@ from pytube import YouTube
 
 
 def download():
-    video_resolution = resolutions_box.get()
-    send_notification("Your video is downloading")
     try:
         youtube_link = link.get()
-        youtube_object = YouTube(youtube_link)
+        if not youtube_link.strip():
+            finished_label.configure(text="Please enter a URL", text_color="red")
+            return
+            
+        if "youtube.com" not in youtube_link and "youtu.be" not in youtube_link:
+            finished_label.configure(text="Please enter a valid YouTube URL", text_color="red")
+            return
+
+        video_resolution = resolutions_box.get()
+        send_notification("Your video is downloading")
+        
+        youtube_object = YouTube(youtube_link, on_progress_callback=None)
         if video_resolution == "Lowest Quality":
             video = youtube_object.streams.get_lowest_resolution()
         else:
             video = youtube_object.streams.get_highest_resolution()
+            
         title.configure(text=youtube_object.title)
         video.download("C:/Users/Lenovo/Videos/python downloader/")
         finished_label.configure(text="Download Completed", text_color="green")
         send_notification("Download Successful")
-    except:
-        finished_label.configure(text="Download Error", text_color="red")
+        
+    except Exception as e:
+        print(f"Error: {str(e)}")  # This will help debug the issue
+        if "regex_search" in str(e):
+            finished_label.configure(text="Invalid YouTube URL", text_color="red")
+        elif "connection" in str(e).lower():
+            finished_label.configure(text="Connection Error. Check your internet.", text_color="red")
+        else:
+            finished_label.configure(text=f"Download Error: {str(e)}", text_color="red")
 
 
 def send_notification(message):
